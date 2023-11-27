@@ -43,9 +43,34 @@ public class UserRepository implements UserRep<User> {
         return matchingUsers;
     }
 
-    @Override
     public List<User> findAllByAge(Integer age) {
         return null;
+    }
+@Override
+    public List<User> findAll() {
+        List<User> allUsers = new ArrayList<>();
+
+        try {
+            String sql = "SELECT * FROM users";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                User user = new User(1,"baraa","hamdy",30);
+                user.setId(resultSet.getInt("user_id"));
+                user.setFirstName(resultSet.getString("first_name"));
+                user.setSecondName(resultSet.getString("second_name"));
+                user.setAge(resultSet.getInt("age"));
+
+                allUsers.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return allUsers;
     }
 
     public List<User> findAll() {
